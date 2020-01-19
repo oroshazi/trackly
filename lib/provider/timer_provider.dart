@@ -39,33 +39,34 @@ class TimerProvider extends ChangeNotifier {
 
   void start(BuildContext context) {
     _stopWatch.start();
-    startTimer(context);
+    _startTimer(context);
   }
 
   void stop(BuildContext context) {
+    var activityProvider =
+        Provider.of<ActivityProvider>(context, listen: false);
     var activity = new Activity(
         duration: this.timeToDisplay,
-        category: Provider.of<ActivityProvider>(context, listen: false)
-            .selectedActivity);
-    Provider.of<ActivityProvider>(context, listen: false)
-        .finishActivity(activity);
+        category: activityProvider.selectedActivity);
+
+    activityProvider.finishActivity(activity);
+    activityProvider.removeSelectedActivity();
     _stopWatch.reset();
     _stopWatch.stop();
-    // _stopWatch.
     Provider.of<TimerProvider>(context, listen: false)
         .changeTimeToDisplay(_stopWatch);
   }
 
-  void startTimer(BuildContext context) {
-    Timer(_duration, () => keepCounting(context));
+  void _startTimer(BuildContext context) {
+    Timer(_duration, () => _keepCounting(context));
   }
 
-  void keepCounting(BuildContext context) {
+  void _keepCounting(BuildContext context) {
     if (_stopWatch.isRunning) {
       // print(_stopWatch.isRunning);
       Provider.of<TimerProvider>(context, listen: false)
           .changeTimeToDisplay(_stopWatch);
-      startTimer(context);
+      _startTimer(context);
     }
   }
 }

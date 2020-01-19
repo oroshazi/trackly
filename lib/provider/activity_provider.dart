@@ -18,6 +18,11 @@ class ActivityProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeSelectedActivity() {
+    _selectedActivity = null;
+    notifyListeners();
+  }
+
   void finishActivity(Activity activity) {
     // Insert finished activity to the first place of the list
     _finishedActivites.insert(0, activity);
