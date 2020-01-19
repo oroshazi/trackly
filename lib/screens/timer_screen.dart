@@ -47,6 +47,10 @@ class _TimerScreenState extends State<TimerScreen> {
                   LayoutWrapper(
                     child: ButtonStop(
                       onPressed: () {
+                        /**
+                         * Use [{listen:false}] if a function is needed to be executed
+                         * Don't use it if you are listenting to a value
+                         */
                         Provider.of<TimerProvider>(context, listen: false)
                             .stop(context);
                       },
