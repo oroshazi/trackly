@@ -19,6 +19,7 @@ class ActivityProvider extends ChangeNotifier {
   }
 
   void finishActivity(Activity activity) {
+    // Insert finished activity to the first place of the list
     _finishedActivites.insert(0, activity);
     notifyListeners();
   }

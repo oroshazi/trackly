@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
 import 'package:trackly_app/provider/category_provider.dart';
+import 'package:trackly_app/widgets/list_tile_widget.dart';
 
 PersistentBottomSheetController buildBottomSheet(BuildContext context) {
   final categoryList =
@@ -28,15 +29,16 @@ PersistentBottomSheetController buildBottomSheet(BuildContext context) {
           Flexible(
             flex: 1,
             child: Container(
+              height: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                   borderRadius: new BorderRadius.only(
                       topLeft: const Radius.circular(20.0),
                       topRight: const Radius.circular(20.0))),
               child: ListView.builder(
                 itemCount: categoryList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
+                  return ListTileWidget(
                     onTap: () {
                       Provider.of<ActivityProvider>(context, listen: false)
                           .selectActivity(categoryList[index].toString());

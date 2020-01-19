@@ -26,8 +26,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          brightness: Brightness.dark,
         ),
+        darkTheme: ThemeData(brightness: Brightness.dark),
         home: TimerScreen(),
       ),
     );

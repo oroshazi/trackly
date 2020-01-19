@@ -9,11 +9,16 @@ class ButtonStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: enabled ? Colors.green : Colors.grey,
-      // mini: true, --> this will be cool for the stop button
-      child: Text("strat"),
-      onPressed: enabled ? onPressed : () => buildBottomSheet(context),
+    return Container(
+      width: 130.0,
+      height: 130.0,
+      child: new RawMaterialButton(
+        fillColor: enabled ? Colors.green : Colors.grey,
+        shape: new CircleBorder(),
+        elevation: 0.0,
+        child: Icon(Icons.play_arrow),
+        onPressed: enabled ? onPressed : () => buildBottomSheet(context),
+      ),
     );
   }
 }

@@ -12,8 +12,9 @@ class ButtonStop extends StatelessWidget {
     var isTimerRunning = Provider.of<TimerProvider>(context).isTimerRunning;
     return isTimerRunning
         ? FloatingActionButton(
+            backgroundColor: Colors.orange,
             mini: true,
-            child: Text("stop"),
+            child: Icon(Icons.stop),
             onPressed: onPressed,
           )
         : Container();

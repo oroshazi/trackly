@@ -7,11 +7,17 @@ class SelectCategoryWidget extends StatelessWidget {
   SelectCategoryWidget({@required this.selectedCagetory});
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: Icon(Icons.arrow_forward_ios),
-      title: Text(
-          selectedCagetory == null ? "Select an activity" : selectedCagetory),
-      onTap: () => buildBottomSheet(context),
+    return Column(
+      children: <Widget>[
+        Divider(),
+        ListTile(
+          trailing: Icon(Icons.arrow_forward_ios),
+          title: Text(
+              selectedCagetory == null ? "Select an activity" : selectedCagetory),
+          onTap: () => buildBottomSheet(context),
+        ),
+        Divider(),
+      ],
     );
   }
 }
