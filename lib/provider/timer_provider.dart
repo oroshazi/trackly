@@ -63,7 +63,6 @@ class TimerProvider extends ChangeNotifier {
 
   void _keepCounting(BuildContext context) {
     if (_stopWatch.isRunning) {
-      // print(_stopWatch.isRunning);
       Provider.of<TimerProvider>(context, listen: false)
           .changeTimeToDisplay(_stopWatch);
       _startTimer(context);

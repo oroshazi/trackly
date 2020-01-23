@@ -15,9 +15,11 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
+  GlobalKey _scaffold = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffold,
       body: SafeArea(
         bottom: true,
         child: Column(
@@ -35,6 +37,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   ),
                   LayoutWrapper(
                     child: ButtonStart(
+                      foreignContext: _scaffold.currentContext,
                       enabled: Provider.of<ActivityProvider>(context)
                               .selectedActivity !=
                           null,
@@ -59,11 +62,16 @@ class _TimerScreenState extends State<TimerScreen> {
                 ],
               ),
             ),
-            SelectCategoryWidget(
-              selectedCagetory:
-                  Provider.of<ActivityProvider>(context).selectedActivity,
+            /**
+             * FIXME: Not sure if its needed or not
+             */
+            SafeArea(
+              bottom: true,
+              child: SelectCategoryWidget(
+                selectedCagetory:
+                    Provider.of<ActivityProvider>(context).selectedActivity,
+              ),
             ),
-            // SafeArea(bottom: true,)
           ],
         ),
       ),

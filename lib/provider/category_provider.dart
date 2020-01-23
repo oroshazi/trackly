@@ -6,7 +6,12 @@ class CategoryProvider extends ChangeNotifier {
     "Learning",
     "Cleaning",
     "Sport",
-    "Entertainment"
+    "Entertainment",
+    "Entertainment",
+    "Entertainment",
+    "Entertainment",
+    "Entertainment",
+    "Entertainment",
   ];
 
   // var _subCategoryWork = ["Meeting", "Research", "Perparation", "Programming"];

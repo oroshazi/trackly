@@ -5,7 +5,12 @@ class ButtonStart extends StatelessWidget {
   final onPressed;
   final bool enabled;
 
-  ButtonStart({@required this.onPressed, @required this.enabled});
+  ///[foreignKey] needed if context is needed from a different screen.
+  ///e.g. If you want to start the timer on timer screen, from the bottomActivitySheet.
+  final BuildContext foreignContext;
+
+  ButtonStart(
+      {@required this.onPressed, @required this.enabled, this.foreignContext});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,11 @@ class ButtonStart extends StatelessWidget {
         shape: new CircleBorder(),
         elevation: 0.0,
         child: Icon(Icons.play_arrow),
-        onPressed: enabled ? onPressed : () => buildBottomSheet(context),
+        onPressed: enabled
+            ? onPressed
+            : () => buildBottomSheet(
+                foreignContext != null ? foreignContext : context,
+                isOpenedWithButton: true),
       ),
     );
   }
