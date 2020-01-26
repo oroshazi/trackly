@@ -17,38 +17,95 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
     backgroundColor: Colors.black12,
     context: context,
     builder: (_) {
-      return Column(
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: Container(
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: new BorderRadius.only(
-                      topLeft: const Radius.circular(20.0),
-                      topRight: const Radius.circular(20.0))),
-              child: ListView.builder(
-                itemCount: categoryList.length,
-                itemBuilder: (BuildContext ctx, int index) {
-                  return ListTileWidget(
+      return Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(20.0),
+                topRight: const Radius.circular(20.0))),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 20, right: 15, left: 15, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(),
+                  Container(
+                    child: Text(
+                      "Select an activity",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                      child: GestureDetector(
+                    child: Icon(Icons.add),
                     onTap: () {
-                      Provider.of<ActivityProvider>(context, listen: false)
-                          .selectActivity(categoryList[index].toString());
-                      if (isOpenedWithButton) {
-                        Provider.of<TimerProvider>(ctx, listen: false)
-                            .start(context);
-                      }
-                      Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Create new category"),
+                              content: Form(
+                                // TODO: here comes the create new thing
+                                child: TextFormField(),
+                              ),
+                              actions: <Widget>[
+                                // usually buttons at the bottom of the dialog
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    FlatButton(
+                                      child: Text("Close"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text("Save"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          });
                     },
-                    title: Text(categoryList[index].toString()),
-                    dense: true,
-                  );
-                },
+                  )),
+                ],
               ),
             ),
-          )
-        ],
+            Divider(),
+            Flexible(
+              flex: 1,
+              child: Container(
+                child: ListView.builder(
+                  itemCount: categoryList.length,
+                  itemBuilder: (BuildContext ctx, int index) {
+                    return ListTileWidget(
+                      onTap: () {
+                        Provider.of<ActivityProvider>(context, listen: false)
+                            .selectActivity(categoryList[index].toString());
+                        if (isOpenedWithButton) {
+                          Provider.of<TimerProvider>(ctx, listen: false)
+                              .start(context);
+                        }
+                        Navigator.pop(context);
+                      },
+                      title: Text(categoryList[index].toString()),
+                      dense: true,
+                    );
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
       );
     },
   );
