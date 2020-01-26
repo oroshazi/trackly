@@ -8,9 +8,8 @@ class ActivityProvider extends ChangeNotifier {
   List<Activity> _finishedActivites = [];
   String _selectedActivity;
 
-  get finishedActivities  {
-     _queryActivites();
-    // if (finishedActivities.lenght > 0) return activityList;
+  get finishedActivities {
+    _queryActivites();
     return _finishedActivites;
   }
 
@@ -47,7 +46,6 @@ class ActivityProvider extends ChangeNotifier {
       print(e);
       throw Error;
     }
-
     notifyListeners();
   }
 
@@ -59,14 +57,16 @@ class ActivityProvider extends ChangeNotifier {
       for (var i = 0; i < allRows.length; i++) {
         activityList.add(Activity.fromJSON(json: allRows[i]));
       }
-      print("allRows");
-      print(allRows);
+      /// Notify listeners only if there is a difference
+      /// between activity list in memory and activity list
+      /// in database. 
+      if (activityList.length != _finishedActivites.length) {
+        notifyListeners();
+      }
       _finishedActivites = activityList;
-      // notifyListeners();  
     } catch (e) {
-      print(e); 
+      print(e);
       throw Error;
     }
-    // return activityList;
   }
 }
