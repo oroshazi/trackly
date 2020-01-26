@@ -10,7 +10,7 @@ class Activity {
   String date;
 
   Activity(
-      {@required this.id,
+      {this.id,
       @required this.category,
       @required this.duration,
       @required this.date,

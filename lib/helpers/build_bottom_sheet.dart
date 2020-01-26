@@ -10,28 +10,15 @@ import 'package:trackly_app/widgets/list_tile_widget.dart';
 ///after clicking on the element in the list.
 ///[context] pass the context of the screen if you want to do changes from the bottom sheet on that screen
 ///
-PersistentBottomSheetController buildBottomSheet(BuildContext context,
-    {bool isOpenedWithButton = false}) {
+buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
   final categoryList =
       Provider.of<CategoryProvider>(context, listen: false).categoryList;
-  return showBottomSheet(
+  return showModalBottomSheet(
     backgroundColor: Colors.black12,
     context: context,
     builder: (_) {
       return Column(
         children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  height: double.infinity,
-                  width: double.infinity,
-                )),
-          ),
           Flexible(
             flex: 1,
             child: Container(
@@ -49,7 +36,7 @@ PersistentBottomSheetController buildBottomSheet(BuildContext context,
                       Provider.of<ActivityProvider>(context, listen: false)
                           .selectActivity(categoryList[index].toString());
                       if (isOpenedWithButton) {
-                        Provider.of<TimerProvider>(context, listen: false)
+                        Provider.of<TimerProvider>(ctx, listen: false)
                             .start(context);
                       }
                       Navigator.pop(context);

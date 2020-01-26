@@ -3,6 +3,7 @@ import 'package:trackly_app/helpers/build_bottom_sheet.dart';
 
 class ButtonStart extends StatelessWidget {
   final onPressed;
+  final bottomSheetBuilder;
   final bool enabled;
 
   ///[foreignKey] needed if context is needed from a different screen.
@@ -10,7 +11,10 @@ class ButtonStart extends StatelessWidget {
   final BuildContext foreignContext;
 
   ButtonStart(
-      {@required this.onPressed, @required this.enabled, this.foreignContext});
+      {@required this.onPressed,
+      @required this.enabled,
+      this.foreignContext,
+      this.bottomSheetBuilder});
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +26,7 @@ class ButtonStart extends StatelessWidget {
         shape: new CircleBorder(),
         elevation: 0.0,
         child: Icon(Icons.play_arrow),
-        onPressed: enabled
-            ? onPressed
-            : () => buildBottomSheet(
-                foreignContext != null ? foreignContext : context,
-                isOpenedWithButton: true),
+        onPressed: enabled ? onPressed : bottomSheetBuilder,
       ),
     );
   }

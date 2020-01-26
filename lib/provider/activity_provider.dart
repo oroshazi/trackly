@@ -52,21 +52,21 @@ class ActivityProvider extends ChangeNotifier {
   }
 
   void _queryActivites() async {
-    // List<Map<String, dynamic>> allRows;
-    // List<Activity> activityList = [];
-    // try {
-    //   allRows = await _dbHelper.queryAllRows();
-    //   for (var i = 0; i < allRows.length; i++) {
-    //     activityList.add(Activity.fromJSON(json: allRows[i]));
-    //   }
-    //   print("allRows");
-    //   print(allRows);
-    //   _finishedActivites = activityList;
-    //   // notifyListeners();  
-    // } catch (e) {
-    //   print(e); 
-    //   throw Error;
-    // }
+    List<Map<String, dynamic>> allRows;
+    List<Activity> activityList = [];
+    try {
+      allRows = await _dbHelper.queryAllRows();
+      for (var i = 0; i < allRows.length; i++) {
+        activityList.add(Activity.fromJSON(json: allRows[i]));
+      }
+      print("allRows");
+      print(allRows);
+      _finishedActivites = activityList;
+      // notifyListeners();  
+    } catch (e) {
+      print(e); 
+      throw Error;
+    }
     // return activityList;
   }
 }

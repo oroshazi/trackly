@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackly_app/helpers/build_bottom_sheet.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
 import 'package:trackly_app/provider/timer_provider.dart';
 import 'package:trackly_app/widgets/activity_list_widget.dart';
@@ -37,13 +38,17 @@ class _TimerScreenState extends State<TimerScreen> {
                   ),
                   LayoutWrapper(
                     child: ButtonStart(
-                      foreignContext: _scaffold.currentContext,
+                      // foreignContext: _scaffold.currentContext,
                       enabled: Provider.of<ActivityProvider>(context)
                               .selectedActivity !=
                           null,
                       onPressed: () {
                         Provider.of<TimerProvider>(context, listen: false)
                             .start(context);
+                      },
+                      bottomSheetBuilder: () {
+                        buildBottomSheet(_scaffold.currentContext,
+                            isOpenedWithButton: true);
                       },
                     ),
                   ),
