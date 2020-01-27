@@ -9,76 +9,74 @@ import 'package:trackly_app/widgets/button_stop.dart';
 import 'package:trackly_app/widgets/select_category_widget.dart';
 import 'package:trackly_app/widgets/timer_widget.dart';
 
-class TimerScreen extends StatefulWidget {
-  final static = "/timer-screen";
-  @override
-  _TimerScreenState createState() => _TimerScreenState();
-}
 
-class _TimerScreenState extends State<TimerScreen> {
-  GlobalKey _scaffold = GlobalKey();
+class TimerScreen extends StatelessWidget {
+  const TimerScreen({
+    Key key,
+    @required this.scaffold,
+  });
+
+  final GlobalKey scaffold;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffold,
-      body: SafeArea(
-        bottom: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            LayoutWrapper(child: TimerWidget()),
-            LayoutWrapper(child: ActivityListWidget()),
-            LayoutWrapper(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  LayoutWrapper(
-                    child: Container(),
+    return SafeArea(
+      bottom: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          LayoutWrapper(child: TimerWidget()),
+          LayoutWrapper(child: ActivityListWidget()),
+          LayoutWrapper(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                LayoutWrapper(
+                  child: Container(),
+                ),
+                LayoutWrapper(
+                  child: ButtonStart(
+                    // foreignContext: _scaffold.currentContext,
+                    enabled: Provider.of<ActivityProvider> (context)
+                            .selectedActivity !=
+                        null,
+                    onPressed: () {
+                      Provider.of<TimerProvider> (context, listen: false)
+                          .start(context);
+                    },
+                    bottomSheetBuilder: () {
+                      buildBottomSheet(scaffold.currentContext,
+                          isOpenedWithButton: true);
+                    },
                   ),
-                  LayoutWrapper(
-                    child: ButtonStart(
-                      // foreignContext: _scaffold.currentContext,
-                      enabled: Provider.of<ActivityProvider>(context)
-                              .selectedActivity !=
-                          null,
-                      onPressed: () {
-                        Provider.of<TimerProvider>(context, listen: false)
-                            .start(context);
-                      },
-                      bottomSheetBuilder: () {
-                        buildBottomSheet(_scaffold.currentContext,
-                            isOpenedWithButton: true);
-                      },
-                    ),
+                ),
+                LayoutWrapper(
+                  child: ButtonStop(
+                    onPressed: () {
+                      /**
+                       * Use [{listen:false}] if a function is needed to be executed
+                       * Don't use it if you are listenting to a value
+                       */
+                      Provider.of<TimerProvider>(context, listen: false)
+                          .stop(context);
+                    },
                   ),
-                  LayoutWrapper(
-                    child: ButtonStop(
-                      onPressed: () {
-                        /**
-                         * Use [{listen:false}] if a function is needed to be executed
-                         * Don't use it if you are listenting to a value
-                         */
-                        Provider.of<TimerProvider>(context, listen: false)
-                            .stop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            /**
-             * FIXME: Not sure if its needed or not
-             */
-            SafeArea(
-              bottom: true,
-              child: SelectCategoryWidget(
-                selectedCagetory:
-                    Provider.of<ActivityProvider>(context).selectedActivity,
-              ),
+          ),
+          /**
+           * FIXME: Not sure if its needed or not
+           */
+          SafeArea(
+            bottom: true,
+            child: SelectCategoryWidget(
+              selectedCagetory:
+                  Provider.of<ActivityProvider>(context).selectedActivity,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
