@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackly_app/models/category_model.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
 import 'package:trackly_app/provider/category_provider.dart';
 import 'package:trackly_app/provider/timer_provider.dart';
@@ -109,4 +110,14 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
       );
     },
   );
+}
+
+List<Category> _selectCategory(BuildContext context) {
+  var _catProv = Provider.of<CategoryProvider>(context);
+  var _actProv = Provider.of<ActivityProvider>(context);
+
+  if (_actProv.selectedActivity != null) {
+    return Category(name: _actProv.selectedActivity).subCategories;
+  }
+  return _catProv.categoryList;
 }

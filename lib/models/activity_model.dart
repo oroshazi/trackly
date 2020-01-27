@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trackly_app/models/database_helper_models.dart';
 
 class Activity {
   String id;
@@ -19,12 +20,13 @@ class Activity {
       this.notes});
 
   Activity.fromJSON({Map<String, dynamic> json}) {
-    this.id = json["_id"].toString();
-    this.category = json["category"].toString();
-    this.subCategory = json["subCategory"];
-    this.duration = json["duration"];
-    this.notes = json["notes"];
-    this.date = json["date"];
-    this.time = json["time"];
+    var fields = FieldNames();
+    this.id = json[fields.columnId].toString();
+    this.category = json[fields.category].toString();
+    this.subCategory = json[fields.subCategory];
+    this.duration = json[fields.duration];
+    this.notes = json[fields.notes];
+    this.date = json[fields.date];
+    this.time = json[fields.time];
   }
 }
