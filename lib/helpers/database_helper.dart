@@ -34,6 +34,14 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     var tables = new TableNames();
     var fields = new FieldNames();
+    var _initialCategories = [
+      "Work",
+      "Learning",
+      "Cleaning",
+      "Sport",
+      "Entertainment",
+      "Traveling"
+    ];
 
     // activities table
     await db.execute('''
@@ -52,15 +60,20 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE ${tables.categories} (
             ${fields.columnId} INTEGER PRIMARY KEY,
-            ${fields.name} TEXT NOT NULL,         
+            ${fields.name} TEXT NOT NULL         
           )
           ''');
+
+    //Initial categories
+    for (var i = 0; i < _initialCategories.length; i++) {
+      await db.insert(tables.categories, {fields.name: _initialCategories[i]});
+    }
 
     // sub-categories table
     await db.execute('''
           CREATE TABLE ${tables.subCategories} (
             ${fields.columnId} INTEGER PRIMARY KEY,
-            ${fields.name} TEXT NOT NULL,         
+            ${fields.name} TEXT NOT NULL         
           )
           ''');
   }

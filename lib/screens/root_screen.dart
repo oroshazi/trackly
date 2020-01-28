@@ -31,11 +31,11 @@ class _RootScreenState extends State<RootScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.timelapse),
-            title: Text('Home'),
+            title: Text('Timer'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart),
-            title: Text('Business'),
+            title: Text('Dashboard'),
           ),
         ],
       ),

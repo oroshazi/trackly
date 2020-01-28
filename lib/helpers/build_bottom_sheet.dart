@@ -12,12 +12,12 @@ import 'package:trackly_app/widgets/list_tile_widget.dart';
 ///[context] pass the context of the screen if you want to do changes from the bottom sheet on that screen
 ///
 buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
-  final categoryList =
-      Provider.of<CategoryProvider>(context, listen: false).categoryList;
   return showModalBottomSheet(
     backgroundColor: Colors.black12,
     context: context,
     builder: (_) {
+      final categoryList =
+          Provider.of<CategoryProvider>(context, listen: false).categoryList;
       return Container(
         height: double.infinity,
         decoration: BoxDecoration(
@@ -91,14 +91,14 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
                     return ListTileWidget(
                       onTap: () {
                         Provider.of<ActivityProvider>(context, listen: false)
-                            .selectActivity(categoryList[index].toString());
+                            .selectActivity(categoryList[index].name);
                         if (isOpenedWithButton) {
                           Provider.of<TimerProvider>(ctx, listen: false)
                               .start(context);
                         }
                         Navigator.pop(context);
                       },
-                      title: Text(categoryList[index].toString()),
+                      title: Text(categoryList[index].name),
                       dense: true,
                     );
                   },
