@@ -6,6 +6,7 @@ class TableNames {
 
 class FieldNames {
   final String columnId = "_id";
+  final String parentCategoryId = "parent_category_id";
   final String category = "category";
   final String duration = "duration";
   final String subCategory = "sub_category";

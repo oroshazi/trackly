@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackly_app/models/category_model.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
 import 'package:trackly_app/provider/category_provider.dart';
 import 'package:trackly_app/provider/timer_provider.dart';
 import 'package:trackly_app/widgets/list_tile_widget.dart';
 
-///
 ///if  [isOpenedWihButton] = true counter starts
 ///after clicking on the element in the list.
 ///[context] pass the context of the screen if you want to do changes from the bottom sheet on that screen
-///
 buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
   return showModalBottomSheet(
     backgroundColor: Colors.black12,
     context: context,
     builder: (_) {
-      final categoryList =
-          Provider.of<CategoryProvider>(context, listen: false).categoryList;
+      print("bottomsheet rebuilds..... -.- ");
+      var categoryList = Provider.of<ActivityProvider>(context)
+                  .selectedActivity ==
+              null
+          ? Provider.of<CategoryProvider>(context, listen: false).categoryList
+          : Provider.of<CategoryProvider>(context, listen: false)
+              .subCategoryList(
+                  name:
+                      Provider.of<ActivityProvider>(context).selectedActivity);
       return Container(
         height: double.infinity,
         decoration: BoxDecoration(
@@ -90,8 +94,9 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
                   itemBuilder: (BuildContext ctx, int index) {
                     return ListTileWidget(
                       onTap: () {
-                        Provider.of<ActivityProvider>(context, listen: false)
-                            .selectActivity(categoryList[index].name);
+                        final activity = Provider.of<ActivityProvider>(context,
+                            listen: false);
+                        activity.selectActivity(categoryList[index].name);
                         if (isOpenedWithButton) {
                           Provider.of<TimerProvider>(ctx, listen: false)
                               .start(context);
@@ -110,14 +115,4 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
       );
     },
   );
-}
-
-List<Category> _selectCategory(BuildContext context) {
-  var _catProv = Provider.of<CategoryProvider>(context);
-  var _actProv = Provider.of<ActivityProvider>(context);
-
-  if (_actProv.selectedActivity != null) {
-    return Category(name: _actProv.selectedActivity).subCategories;
-  }
-  return _catProv.categoryList;
 }

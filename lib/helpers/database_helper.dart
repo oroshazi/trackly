@@ -30,7 +30,7 @@ class DatabaseHelper {
         version: _databaseVersion, onCreate: _onCreate);
   }
 
-  // SQL code to create the database table
+  // SQL code to create the database tables
   Future _onCreate(Database db, int version) async {
     var tables = new TableNames();
     var fields = new FieldNames();
@@ -42,6 +42,7 @@ class DatabaseHelper {
       "Entertainment",
       "Traveling"
     ];
+    var _initialSubCategoriesWork = ["Meeting", "Coding", "research"];
 
     // activities table
     await db.execute('''
@@ -73,9 +74,19 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE ${tables.subCategories} (
             ${fields.columnId} INTEGER PRIMARY KEY,
-            ${fields.name} TEXT NOT NULL         
+            ${fields.parentCategoryId} INTEGER NOT NULL,         
+            ${fields.name} TEXT NOT NULL,         
+            FOREIGN KEY(${fields.parentCategoryId}) REFERENCES ${tables.categories}(${fields.columnId})
           )
           ''');
+
+    //Initial categories in work TODO: remove this
+    for (var i = 0; i < _initialSubCategoriesWork.length; i++) {
+      await db.insert(tables.subCategories, {
+        fields.parentCategoryId: 1,
+        fields.name: _initialSubCategoriesWork[i]
+      });
+    }
   }
 
   // Helper methods
@@ -93,6 +104,12 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> queryAllRows(String table) async {
     Database db = await instance.database;
     return await db.query(table);
+  }
+
+  /// Executes raw SQL query and returns a list of rows that were found
+  Future<List<Map<String, dynamic>>> rawQuery(String query) async {
+    Database db = await instance.database;
+    return await db.rawQuery(query);
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
