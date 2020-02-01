@@ -9,7 +9,7 @@ class ActivityProvider extends ChangeNotifier {
   var _tables = new TableNames();
 
   List<Activity> _finishedActivites = [];
-  String _selectedActivity;
+  List<String> _selectedActivityList = [];
 
   get finishedActivities {
     _queryActivites();
@@ -17,16 +17,17 @@ class ActivityProvider extends ChangeNotifier {
   }
 
   String get selectedActivity {
-    return _selectedActivity;
+    if (_selectedActivityList.length != 0) return _selectedActivityList.last;
+    return null;
   }
 
   void selectActivity(String activity) {
-    _selectedActivity = activity;
+    _selectedActivityList.add(activity);
     notifyListeners();
   }
 
   void removeSelectedActivity() {
-    _selectedActivity = null;
+    _selectedActivityList.removeLast();
     notifyListeners();
   }
 

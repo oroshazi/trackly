@@ -9,7 +9,6 @@ import 'package:trackly_app/widgets/button_stop.dart';
 import 'package:trackly_app/widgets/select_category_widget.dart';
 import 'package:trackly_app/widgets/timer_widget.dart';
 
-
 class TimerScreen extends StatelessWidget {
   const TimerScreen({
     Key key,
@@ -38,11 +37,11 @@ class TimerScreen extends StatelessWidget {
                 LayoutWrapper(
                   child: ButtonStart(
                     // foreignContext: _scaffold.currentContext,
-                    enabled: Provider.of<ActivityProvider> (context)
+                    enabled: Provider.of<ActivityProvider>(context)
                             .selectedActivity !=
                         null,
                     onPressed: () {
-                      Provider.of<TimerProvider> (context, listen: false)
+                      Provider.of<TimerProvider>(context, listen: false)
                           .start(context);
                     },
                     bottomSheetBuilder: () {
@@ -54,12 +53,17 @@ class TimerScreen extends StatelessWidget {
                 LayoutWrapper(
                   child: ButtonStop(
                     onPressed: () {
+                      final p =
+                          Provider.of<TimerProvider>(context, listen: false);
+
+                      p.isSubTimerRunning
+                          ? p.stopSubActivity(context)
+                          : p.stop(context);
+
                       /**
                        * Use [{listen:false}] if a function is needed to be executed
                        * Don't use it if you are listenting to a value
                        */
-                      Provider.of<TimerProvider>(context, listen: false)
-                          .stop(context);
                     },
                   ),
                 ),
@@ -69,13 +73,13 @@ class TimerScreen extends StatelessWidget {
           /**
            * FIXME: Not sure if its needed or not
            */
-          SafeArea(
-            bottom: true,
-            child: SelectCategoryWidget(
-              selectedCagetory:
-                  Provider.of<ActivityProvider>(context).selectedActivity,
-            ),
-          ),
+          // SafeArea(
+          //   bottom: true,
+          //   child: SelectCategoryWidget(
+          //     selectedCagetory:
+          //         Provider.of<ActivityProvider>(context).selectedActivity,
+          //   ),
+          // ),
         ],
       ),
     );

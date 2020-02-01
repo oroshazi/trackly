@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trackly_app/helpers/build_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:trackly_app/provider/activity_provider.dart';
 
 class ButtonStart extends StatelessWidget {
   final onPressed;
@@ -25,8 +26,10 @@ class ButtonStart extends StatelessWidget {
         fillColor: enabled ? Colors.green : Colors.grey,
         shape: new CircleBorder(),
         elevation: 0.0,
-        child: Icon(Icons.play_arrow),
-        onPressed: enabled ? onPressed : bottomSheetBuilder,
+        child: Provider.of<ActivityProvider>(context).selectedActivity == null
+            ? Icon(Icons.play_arrow)
+            : Icon(Icons.add),
+        onPressed: bottomSheetBuilder,
       ),
     );
   }

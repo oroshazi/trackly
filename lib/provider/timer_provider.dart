@@ -8,8 +8,13 @@ import 'package:trackly_app/provider/activity_provider.dart';
 class TimerProvider extends ChangeNotifier {
   String _timeToDisplay = "00:00:00";
   bool _isTimerRunning = false;
-  final _duration = const Duration(milliseconds: 1);
-  final _stopWatch = Stopwatch();
+  final _stopwatch = new Stopwatch();
+  final _duration = const Duration(seconds: 1);
+
+  bool _isSubTimerRunning = false;
+  // final _subStopWatch = new Stopwatch();
+
+  Duration _elapsedTimeInMainActivity = new Duration();
 
   get timeToDisplay {
     return _timeToDisplay;
@@ -17,6 +22,10 @@ class TimerProvider extends ChangeNotifier {
 
   get isTimerRunning {
     return _isTimerRunning;
+  }
+
+  get isSubTimerRunning {
+    return _isSubTimerRunning;
   }
 
   void changeTimeToDisplay(Stopwatch stopwatch) {
@@ -28,8 +37,10 @@ class TimerProvider extends ChangeNotifier {
       _isTimerRunning = false;
       notifyListeners();
     }
-    var elapsed = stopwatch.elapsed;
-    this._timeToDisplay = stopwatch.elapsed.inHours.toString().padLeft(2, "0") +
+
+    var elapsed = stopwatch.elapsed - _elapsedTimeInMainActivity;
+
+    this._timeToDisplay = elapsed.inHours.toString().padLeft(2, "0") +
         ":" +
         (elapsed.inMinutes % 60).toString().padLeft(2, "0") +
         ":" +
@@ -38,23 +49,42 @@ class TimerProvider extends ChangeNotifier {
   }
 
   void start(BuildContext context) {
-    _stopWatch.start();
+    _stopwatch.start();
     _startTimer(context);
+  }
+
+  void startSubActivity() {
+    _isSubTimerRunning = true;
+    _elapsedTimeInMainActivity = _stopwatch.elapsed;
+  }
+
+  void stopSubActivity(BuildContext context) {
+    var _activityProvider =
+        Provider.of<ActivityProvider>(context, listen: false);
+    var activity = new Activity(
+        duration: this.timeToDisplay,
+        category: _activityProvider.selectedActivity);
+
+    _activityProvider.finishActivity(activity);
+    _activityProvider.removeSelectedActivity();
+    _elapsedTimeInMainActivity = Duration();
+    _isSubTimerRunning = false;
+    notifyListeners();
   }
 
   void stop(BuildContext context) {
     var activityProvider =
         Provider.of<ActivityProvider>(context, listen: false);
+
     var activity = new Activity(
         duration: this.timeToDisplay,
         category: activityProvider.selectedActivity);
 
     activityProvider.finishActivity(activity);
     activityProvider.removeSelectedActivity();
-    _stopWatch.reset();
-    _stopWatch.stop();
-    Provider.of<TimerProvider>(context, listen: false)
-        .changeTimeToDisplay(_stopWatch);
+    _stopwatch.reset();
+    _stopwatch.stop();
+    this.changeTimeToDisplay(_stopwatch);
   }
 
   void _startTimer(BuildContext context) {
@@ -62,9 +92,8 @@ class TimerProvider extends ChangeNotifier {
   }
 
   void _keepCounting(BuildContext context) {
-    if (_stopWatch.isRunning) {
-      Provider.of<TimerProvider>(context, listen: false)
-          .changeTimeToDisplay(_stopWatch);
+    if (_stopwatch.isRunning) {
+      this.changeTimeToDisplay(_stopwatch);
       _startTimer(context);
     }
   }

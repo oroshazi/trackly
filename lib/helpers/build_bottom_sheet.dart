@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackly_app/models/sub_category_model.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
 import 'package:trackly_app/provider/category_provider.dart';
 import 'package:trackly_app/provider/timer_provider.dart';
@@ -13,7 +14,7 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
     backgroundColor: Colors.black12,
     context: context,
     builder: (_) {
-      print("bottomsheet rebuilds..... -.- ");
+      // print("TODO: Make this rebuild ferwer. bottomsheet rebuilds..... -.- ");
       var categoryList = Provider.of<ActivityProvider>(context)
                   .selectedActivity ==
               null
@@ -92,16 +93,22 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
                 child: ListView.builder(
                   itemCount: categoryList.length,
                   itemBuilder: (BuildContext ctx, int index) {
+                    bool isSubCategoryList = categoryList is List<SubCategory>;
                     return ListTileWidget(
                       onTap: () {
                         final activity = Provider.of<ActivityProvider>(context,
                             listen: false);
                         activity.selectActivity(categoryList[index].name);
-                        if (isOpenedWithButton) {
+                        if (isOpenedWithButton && !isSubCategoryList) {
                           Provider.of<TimerProvider>(ctx, listen: false)
                               .start(context);
+                          Navigator.pop(context);
                         }
-                        Navigator.pop(context);
+                        if (isOpenedWithButton && isSubCategoryList) {
+                          Provider.of<TimerProvider>(ctx, listen: false)
+                              .startSubActivity();
+                          Navigator.pop(context);
+                        }
                       },
                       title: Text(categoryList[index].name),
                       dense: true,
