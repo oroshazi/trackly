@@ -23,7 +23,6 @@ class ActivityProvider extends ChangeNotifier {
 
   Activity get runningMainActicity {
     if (_selectedActivityList.length != 0) {
-      print(_selectedActivityList.first.id);
       return _selectedActivityList.first;
     }
     return Activity(category: null);

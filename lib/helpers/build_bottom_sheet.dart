@@ -62,15 +62,13 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
                         return ListView.builder(
                           itemCount: categoryList.length,
                           itemBuilder: (BuildContext ctx, int index) {
-                            // print("ListView rebuilt");
-
                             bool isSubCategoryList =
                                 categoryList is List<SubCategory>;
 
-                            if (isSubCategoryList) {
-                              print((categoryList as List<SubCategory>)[index]
-                                  .parentId);
-                            }
+                            // if (isSubCategoryList) {
+                            //   print((categoryList as List<SubCategory>)[index]
+                            //       .parentId);
+                            // }
 
                             return ListTileWidget(
                               onTap: () {
@@ -94,7 +92,7 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
                                 }
                               },
                               title: Text(categoryList[index].name),
-                              dense: true,
+                              dense: false,
                             );
                           },
                         );
@@ -163,7 +161,6 @@ class AlertDialogWidget extends StatelessWidget {
                       Provider.of<ActivityProvider>(context, listen: false)
                           .runningMainActicity;
 
-                  print(mainActivity.id);
                   var finished = await Provider.of<CategoryProvider>(context,
                           listen: false)
                       .createNewSubCategory(SubCategory(
@@ -174,7 +171,6 @@ class AlertDialogWidget extends StatelessWidget {
                   }
                 }
               : (categoryName) async {
-                  print(categoryName.toUpperCase());
                   var finished = await Provider.of<CategoryProvider>(context,
                           listen: false)
                       .createNewCategory(Category(name: categoryName));

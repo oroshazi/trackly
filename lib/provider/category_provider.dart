@@ -61,7 +61,6 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   Future<void> _queryCategoryList() async {
-    // print("_queryCategoryList called");
     List<Map<String, dynamic>> allRows;
     List<Category> categoryList = [];
     try {
@@ -87,11 +86,7 @@ class CategoryProvider extends ChangeNotifier {
     List<Map<String, dynamic>> _queryResult;
 
     if (parentCategoryId == null) {
-        print("parentCategoryID"); 
-        print(parentCategoryId); 
       try {
-        print("parentCategoryName"); 
-        print(parentCategoryName); 
         _id = await _getCategoryIdByName(parentCategoryName);
 
         if (_id == null) {
@@ -115,7 +110,6 @@ class CategoryProvider extends ChangeNotifier {
       }
 
       if (_subCategoryList.length != subCategoryList.length) {
-        print(subCategoryList.last.name);
         _subCategoryList = subCategoryList;
         notifyListeners();
       }
@@ -133,8 +127,8 @@ class CategoryProvider extends ChangeNotifier {
       _queryResult = await _dbHelper.rawQuery(''' 
        SELECT ${_fields.columnId} FROM ${_tables.categories} WHERE ${_fields.name} = "$name";
        ''');
+
       if (_queryResult.length == 0) {
-        print(_queryResult);
         return _categoryId = null;
       }
       _categoryId = _queryResult[0][_fields.columnId];
