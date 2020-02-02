@@ -7,13 +7,12 @@ import 'package:trackly_app/provider/activity_provider.dart';
 
 class TimerProvider extends ChangeNotifier {
   String _timeToDisplay = "00:00:00";
-  bool _isTimerRunning = false;
+
   final _stopwatch = new Stopwatch();
   final _duration = const Duration(seconds: 1);
 
+  bool _isTimerRunning = false;
   bool _isSubTimerRunning = false;
-  // final _subStopWatch = new Stopwatch();
-
   Duration _elapsedTimeInMainActivity = new Duration();
 
   get timeToDisplay {

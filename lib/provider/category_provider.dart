@@ -11,6 +11,7 @@ class CategoryProvider extends ChangeNotifier {
 
   List<Category> _categoryList = [];
   List<SubCategory> _subCategoryList = [];
+
   // List<Category> _categoryListToDisplay = [];
 
   List<Category> get categoryList {
@@ -25,28 +26,24 @@ class CategoryProvider extends ChangeNotifier {
     return _subCategoryList;
   }
 
-  // List<Category> categoryListToDisplay(String selectedCategory) {
-  //   if (selectedCategory == null) {
-  //     _categoryListToDisplay = this.categoryList;
-  //     notifyListeners();
-  //     return _categoryListToDisplay;
-  //   }
-  //   if (selectedCategory != null &&
-  //       _categoryListToDisplay is! List<SubCategory>) {
-  //     _categoryListToDisplay =
-  //         this.subCategoryList(name: selectedCategory);
-  //     notifyListeners();
-  //     return _categoryListToDisplay;
-  //   }
-  //   if (_categoryListToDisplay is List<SubCategory>) {
-  //     print("_categoryListToDisplay is List<SubCategory>");
-  //     print(_categoryListToDisplay is List<SubCategory>);
-  //     return _categoryListToDisplay;
-  //   }
-  //   return _categoryListToDisplay;
-  // }
+  Future<int> createNewCategory(Category category) async {
+    var _queryResult;
+    try {
+      _queryResult = _queryResult = await _dbHelper
+          .insert({_fields.name: category.name}, _tables.categories);
 
-  void _queryCategoryList() async {
+      if (_queryResult != null) {
+        await _queryCategoryList();
+      }
+    } catch (e) {
+      print(e);
+      throw Error;
+    }
+    return _queryResult;
+  }
+
+  Future<void> _queryCategoryList() async {
+    print("_queryCategoryList called");
     List<Map<String, dynamic>> allRows;
     List<Category> categoryList = [];
     try {
@@ -54,17 +51,18 @@ class CategoryProvider extends ChangeNotifier {
       for (var i = 0; i < allRows.length; i++) {
         categoryList.add(Category.fromJSON(json: allRows[i]));
       }
+
       if (categoryList.length != _categoryList.length) {
+        _categoryList = categoryList;
         notifyListeners();
       }
-      _categoryList = categoryList;
     } catch (e) {
       print(e);
       throw Error;
     }
   }
 
-  _querySubCategoryList(String name, {int id}) async {
+  Future<void> _querySubCategoryList(String name, {int id}) async {
     var _id;
     List<SubCategory> _subCategories = [];
     List<Map<String, dynamic>> _queryResult;
@@ -72,6 +70,7 @@ class CategoryProvider extends ChangeNotifier {
     if (id == null) {
       try {
         _id = await _getCategoryIdByName(name);
+
         if (_id == null) {
           return this._subCategoryList;
         }
@@ -86,7 +85,6 @@ class CategoryProvider extends ChangeNotifier {
       _queryResult = await _dbHelper.rawQuery(''' 
        SELECT * FROM ${_tables.subCategories} WHERE ${_fields.parentCategoryId} = $_id;
        ''');
-      // print(_queryResult);
 
       for (var i = 0; i < _queryResult.length; i++) {
         _subCategories.add(SubCategory.fromJSON(json: _queryResult[i]));
@@ -100,8 +98,6 @@ class CategoryProvider extends ChangeNotifier {
       print(e);
       throw Error;
     }
-
-    print(this._subCategoryList);
   }
 
   Future<int> _getCategoryIdByName(String name) async {
@@ -124,3 +120,24 @@ class CategoryProvider extends ChangeNotifier {
     return _categoryId;
   }
 }
+
+// List<Category> categoryListToDisplay(String selectedCategory) {
+//   if (selectedCategory == null) {
+//     _categoryListToDisplay = this.categoryList;
+//     notifyListeners();
+//     return _categoryListToDisplay;
+//   }
+//   if (selectedCategory != null &&
+//       _categoryListToDisplay is! List<SubCategory>) {
+//     _categoryListToDisplay =
+//         this.subCategoryList(name: selectedCategory);
+//     notifyListeners();
+//     return _categoryListToDisplay;
+//   }
+//   if (_categoryListToDisplay is List<SubCategory>) {
+//     print("_categoryListToDisplay is List<SubCategory>");
+//     print(_categoryListToDisplay is List<SubCategory>);
+//     return _categoryListToDisplay;
+//   }
+//   return _categoryListToDisplay;
+// }

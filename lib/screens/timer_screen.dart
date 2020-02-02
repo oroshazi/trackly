@@ -6,7 +6,7 @@ import 'package:trackly_app/provider/timer_provider.dart';
 import 'package:trackly_app/widgets/activity_list_widget.dart';
 import 'package:trackly_app/widgets/button_start.dart';
 import 'package:trackly_app/widgets/button_stop.dart';
-import 'package:trackly_app/widgets/select_category_widget.dart';
+// import 'package:trackly_app/widgets/select_category_widget.dart';
 import 'package:trackly_app/widgets/timer_widget.dart';
 
 class TimerScreen extends StatelessWidget {
@@ -53,7 +53,7 @@ class TimerScreen extends StatelessWidget {
                 LayoutWrapper(
                   child: ButtonStop(
                     onPressed: () {
-                      final p =
+                      var p =
                           Provider.of<TimerProvider>(context, listen: false);
 
                       p.isSubTimerRunning
