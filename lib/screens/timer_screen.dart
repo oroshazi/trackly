@@ -38,7 +38,7 @@ class TimerScreen extends StatelessWidget {
                   child: ButtonStart(
                     // foreignContext: _scaffold.currentContext,
                     enabled: Provider.of<ActivityProvider>(context)
-                            .selectedActivity !=
+                            .selectedActivity.category !=
                         null,
                     onPressed: () {
                       Provider.of<TimerProvider>(context, listen: false)

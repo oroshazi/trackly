@@ -19,9 +19,9 @@ class CategoryProvider extends ChangeNotifier {
     return _categoryList;
   }
 
-  List<SubCategory> subCategoryList({@required String name}) {
-    if (name != null) {
-      _querySubCategoryList(name);
+  List<SubCategory> subCategoryList({@required String parentCategoryName}) {
+    if (parentCategoryName != null) {
+      _querySubCategoryList(parentCategoryName: parentCategoryName);
     }
     return _subCategoryList;
   }
@@ -42,8 +42,26 @@ class CategoryProvider extends ChangeNotifier {
     return _queryResult;
   }
 
+  Future<int> createNewSubCategory(SubCategory subCategory) async {
+    var _queryResult;
+    try {
+      _queryResult = _queryResult = await _dbHelper.insert({
+        _fields.name: subCategory.name,
+        _fields.parentCategoryId: subCategory.parentId
+      }, _tables.subCategories);
+
+      if (_queryResult != null) {
+        await _querySubCategoryList(parentCategoryId: subCategory.parentId);
+      }
+    } catch (e) {
+      print(e);
+      throw Error;
+    }
+    return _queryResult;
+  }
+
   Future<void> _queryCategoryList() async {
-    print("_queryCategoryList called");
+    // print("_queryCategoryList called");
     List<Map<String, dynamic>> allRows;
     List<Category> categoryList = [];
     try {
@@ -62,23 +80,29 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _querySubCategoryList(String name, {int id}) async {
+  Future<void> _querySubCategoryList(
+      {String parentCategoryName, int parentCategoryId}) async {
     var _id;
-    List<SubCategory> _subCategories = [];
+    List<SubCategory> subCategoryList = [];
     List<Map<String, dynamic>> _queryResult;
 
-    if (id == null) {
+    if (parentCategoryId == null) {
+        print("parentCategoryID"); 
+        print(parentCategoryId); 
       try {
-        _id = await _getCategoryIdByName(name);
+        print("parentCategoryName"); 
+        print(parentCategoryName); 
+        _id = await _getCategoryIdByName(parentCategoryName);
 
         if (_id == null) {
+          print("id not found");
           return this._subCategoryList;
         }
       } catch (e) {
         throw Error;
       }
     } else {
-      _id = id;
+      _id = parentCategoryId;
     }
 
     try {
@@ -87,13 +111,14 @@ class CategoryProvider extends ChangeNotifier {
        ''');
 
       for (var i = 0; i < _queryResult.length; i++) {
-        _subCategories.add(SubCategory.fromJSON(json: _queryResult[i]));
+        subCategoryList.add(SubCategory.fromJSON(json: _queryResult[i]));
       }
 
-      if (this._subCategoryList.length != _subCategories.length) {
+      if (_subCategoryList.length != subCategoryList.length) {
+        print(subCategoryList.last.name);
+        _subCategoryList = subCategoryList;
         notifyListeners();
       }
-      this._subCategoryList = _subCategories;
     } catch (e) {
       print(e);
       throw Error;
@@ -109,6 +134,7 @@ class CategoryProvider extends ChangeNotifier {
        SELECT ${_fields.columnId} FROM ${_tables.categories} WHERE ${_fields.name} = "$name";
        ''');
       if (_queryResult.length == 0) {
+        print(_queryResult);
         return _categoryId = null;
       }
       _categoryId = _queryResult[0][_fields.columnId];

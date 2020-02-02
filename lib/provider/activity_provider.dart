@@ -9,19 +9,27 @@ class ActivityProvider extends ChangeNotifier {
   var _tables = new TableNames();
 
   List<Activity> _finishedActivites = [];
-  List<String> _selectedActivityList = [];
+  List<Activity> _selectedActivityList = [];
 
   get finishedActivities {
     _queryActivites();
     return _finishedActivites;
   }
 
-  String get selectedActivity {
+  Activity get selectedActivity {
     if (_selectedActivityList.length != 0) return _selectedActivityList.last;
-    return null;
+    return Activity(category: null);
   }
 
-  void selectActivity(String activity) {
+  Activity get runningMainActicity {
+    if (_selectedActivityList.length != 0) {
+      print(_selectedActivityList.first.id);
+      return _selectedActivityList.first;
+    }
+    return Activity(category: null);
+  }
+
+  void selectActivity(Activity activity) {
     _selectedActivityList.add(activity);
     notifyListeners();
   }

@@ -62,7 +62,7 @@ class TimerProvider extends ChangeNotifier {
         Provider.of<ActivityProvider>(context, listen: false);
     var activity = new Activity(
         duration: this.timeToDisplay,
-        category: _activityProvider.selectedActivity);
+        category: _activityProvider.selectedActivity.category);
 
     _activityProvider.finishActivity(activity);
     _activityProvider.removeSelectedActivity();
@@ -77,7 +77,7 @@ class TimerProvider extends ChangeNotifier {
 
     var activity = new Activity(
         duration: this.timeToDisplay,
-        category: activityProvider.selectedActivity);
+        category: activityProvider.selectedActivity.category);
 
     activityProvider.finishActivity(activity);
     activityProvider.removeSelectedActivity();

@@ -18,7 +18,7 @@ class TimerWidget extends StatelessWidget {
               style: TextStyle(fontSize: 72),
             ),
           ),
-          Text(Provider.of<ActivityProvider>(context).selectedActivity ??
+          Text(Provider.of<ActivityProvider>(context).selectedActivity.category ??
               "",)
         ],
       ),

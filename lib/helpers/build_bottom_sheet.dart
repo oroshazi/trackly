@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackly_app/models/activity_model.dart';
 import 'package:trackly_app/models/category_model.dart';
 import 'package:trackly_app/models/sub_category_model.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
@@ -62,16 +63,23 @@ buildBottomSheet(BuildContext context, {bool isOpenedWithButton = false}) {
                           itemCount: categoryList.length,
                           itemBuilder: (BuildContext ctx, int index) {
                             // print("ListView rebuilt");
+
                             bool isSubCategoryList =
                                 categoryList is List<SubCategory>;
+
+                            if (isSubCategoryList) {
+                              print((categoryList as List<SubCategory>)[index]
+                                  .parentId);
+                            }
 
                             return ListTileWidget(
                               onTap: () {
                                 final activity = Provider.of<ActivityProvider>(
                                     context,
                                     listen: false);
-                                activity
-                                    .selectActivity(categoryList[index].name);
+                                activity.selectActivity(Activity(
+                                    category: categoryList[index].name,
+                                    id: categoryList[index].id));
 
                                 if (isOpenedWithButton && !isSubCategoryList) {
                                   Provider.of<TimerProvider>(ctx, listen: false)
@@ -122,9 +130,9 @@ _buildShowDialog(BuildContext context) async {
 List<Category> _buildCategoryListToShow(BuildContext context) {
   var mainCategoryList = Provider.of<CategoryProvider>(context).categoryList;
   var subCategoryList = Provider.of<CategoryProvider>(context).subCategoryList(
-      name: Provider.of<ActivityProvider>(context).selectedActivity);
+      parentCategoryName: Provider.of<ActivityProvider>(context).runningMainActicity.category);
   var categoryList =
-      Provider.of<ActivityProvider>(context).selectedActivity == null
+      Provider.of<ActivityProvider>(context).selectedActivity.category == null
           ? mainCategoryList
           : subCategoryList;
   return categoryList;
@@ -150,7 +158,21 @@ class AlertDialogWidget extends StatelessWidget {
         key: _formKey,
         child: TextFormField(
           onSaved: isSubCategoryList
-              ? (value) => print("lolller subcategory" + value)
+              ? (subCategoryName) async {
+                  var mainActivity =
+                      Provider.of<ActivityProvider>(context, listen: false)
+                          .runningMainActicity;
+
+                  print(mainActivity.id);
+                  var finished = await Provider.of<CategoryProvider>(context,
+                          listen: false)
+                      .createNewSubCategory(SubCategory(
+                          name: subCategoryName, parentId: mainActivity.id));
+
+                  if (finished != null) {
+                    Navigator.pop(context);
+                  }
+                }
               : (categoryName) async {
                   print(categoryName.toUpperCase());
                   var finished = await Provider.of<CategoryProvider>(context,

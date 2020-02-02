@@ -26,7 +26,7 @@ class ButtonStart extends StatelessWidget {
         fillColor: enabled ? Colors.green : Colors.grey,
         shape: new CircleBorder(),
         elevation: 0.0,
-        child: Provider.of<ActivityProvider>(context).selectedActivity == null
+        child: Provider.of<ActivityProvider>(context).selectedActivity.category == null
             ? Icon(Icons.play_arrow)
             : Icon(Icons.add),
         onPressed: bottomSheetBuilder,
