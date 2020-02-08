@@ -128,7 +128,8 @@ _buildShowDialog(BuildContext context) async {
 List<Category> _buildCategoryListToShow(BuildContext context) {
   var mainCategoryList = Provider.of<CategoryProvider>(context).categoryList;
   var subCategoryList = Provider.of<CategoryProvider>(context).subCategoryList(
-      parentCategoryName: Provider.of<ActivityProvider>(context).runningMainActicity.category);
+      parentCategoryName:
+          Provider.of<ActivityProvider>(context).runningMainActicity.category);
   var categoryList =
       Provider.of<ActivityProvider>(context).selectedActivity.category == null
           ? mainCategoryList
