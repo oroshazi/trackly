@@ -5,6 +5,7 @@ class Activity {
   int id;
   String category;
   String subCategory;
+  // TODO: this should be Duration()
   String duration;
   String notes;
   String time;

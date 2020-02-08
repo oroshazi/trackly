@@ -11,7 +11,7 @@ class ActivityProvider extends ChangeNotifier {
   List<Activity> _finishedActivites = [];
   List<Activity> _selectedActivityList = [];
 
-  get finishedActivities {
+  List<Activity> get finishedActivities {
     _queryActivites();
     return _finishedActivites;
   }
