@@ -49,7 +49,7 @@ class ActivityProvider extends ChangeNotifier {
         _fields.date: DateTime.now().toString(),
         _fields.time: DateTime.now().toString(),
         _fields.category: activity.category,
-        _fields.duration: activity.duration,
+        _fields.duration: activity.duration.toString(),
         _fields.notes: activity.notes,
         _fields.subCategory: activity.subCategory,
       }, _tables.activities);

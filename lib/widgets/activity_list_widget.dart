@@ -20,7 +20,7 @@ class ActivityListWidget extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     title: Text(activityList[index].category),
-                    trailing: Text(activityList[index].duration),
+                    trailing: Text(activityList[index].duration.toString()),
                     dense: true,
                   ),
                   Divider()

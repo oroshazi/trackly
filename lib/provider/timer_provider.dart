@@ -60,8 +60,13 @@ class TimerProvider extends ChangeNotifier {
   void stopSubActivity(BuildContext context) {
     var _activityProvider =
         Provider.of<ActivityProvider>(context, listen: false);
+    var _elapsed = _stopwatch.elapsed;
+
     var activity = new Activity(
-        duration: this.timeToDisplay,
+        duration: new Duration(
+            hours: _elapsed.inHours,
+            minutes: _elapsed.inMinutes,
+            seconds: _elapsed.inSeconds),
         category: _activityProvider.selectedActivity.category);
 
     _activityProvider.finishActivity(activity);
@@ -72,15 +77,19 @@ class TimerProvider extends ChangeNotifier {
   }
 
   void stop(BuildContext context) {
-    var activityProvider =
+    var _activityProvider =
         Provider.of<ActivityProvider>(context, listen: false);
+    var _elapsed = _stopwatch.elapsed;
 
     var activity = new Activity(
-        duration: this.timeToDisplay,
-        category: activityProvider.selectedActivity.category);
+        duration: new Duration(
+            hours: _elapsed.inHours,
+            minutes: _elapsed.inMinutes,
+            seconds: _elapsed.inSeconds),
+        category: _activityProvider.selectedActivity.category);
 
-    activityProvider.finishActivity(activity);
-    activityProvider.removeSelectedActivity();
+    _activityProvider.finishActivity(activity);
+    _activityProvider.removeSelectedActivity();
     _stopwatch.reset();
     _stopwatch.stop();
     this.changeTimeToDisplay(_stopwatch);
