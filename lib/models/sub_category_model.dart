@@ -9,9 +9,8 @@ class SubCategory extends Category {
   SubCategory({this.name, this.id, this.parentId});
 
   SubCategory.fromJSON({Map json}) {
-    var _f = FieldNames();
-    this.id = json[_f.columnId];
-    this.name = json[_f.name];
-    this.parentId = json[_f.parentCategoryId];
+    this.id = json[Fields.COLUMN_ID];
+    this.name = json[Fields.NAME];
+    this.parentId = json[Fields.PARENT_CATEGORY_ID];
   }
 }

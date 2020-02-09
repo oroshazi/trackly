@@ -6,13 +6,9 @@ import 'package:trackly_app/models/sub_category_model.dart';
 
 class CategoryProvider extends ChangeNotifier {
   final _dbHelper = DatabaseHelper.instance;
-  var _fields = new FieldNames();
-  var _tables = new TableNames();
 
   List<Category> _categoryList = [];
   List<SubCategory> _subCategoryList = [];
-
-  // List<Category> _categoryListToDisplay = [];
 
   List<Category> get categoryList {
     _queryCategoryList();
@@ -30,7 +26,7 @@ class CategoryProvider extends ChangeNotifier {
     var _queryResult;
     try {
       _queryResult = _queryResult = await _dbHelper
-          .insert({_fields.name: category.name}, _tables.categories);
+          .insert({Fields.NAME: category.name}, Tables.CATEGORIES);
 
       if (_queryResult != null) {
         await _queryCategoryList();
@@ -46,9 +42,9 @@ class CategoryProvider extends ChangeNotifier {
     var _queryResult;
     try {
       _queryResult = _queryResult = await _dbHelper.insert({
-        _fields.name: subCategory.name,
-        _fields.parentCategoryId: subCategory.parentId
-      }, _tables.subCategories);
+        Fields.NAME: subCategory.name,
+        Fields.PARENT_CATEGORY_ID: subCategory.parentId
+      }, Tables.SUB_CATEGORIES);
 
       if (_queryResult != null) {
         await _querySubCategoryList(parentCategoryId: subCategory.parentId);
@@ -64,7 +60,7 @@ class CategoryProvider extends ChangeNotifier {
     List<Map<String, dynamic>> allRows;
     List<Category> categoryList = [];
     try {
-      allRows = await _dbHelper.queryAllRows(_tables.categories);
+      allRows = await _dbHelper.queryAllRows(Tables.CATEGORIES);
       for (var i = 0; i < allRows.length; i++) {
         categoryList.add(Category.fromJSON(json: allRows[i]));
       }
@@ -102,7 +98,7 @@ class CategoryProvider extends ChangeNotifier {
 
     try {
       _queryResult = await _dbHelper.rawQuery(''' 
-       SELECT * FROM ${_tables.subCategories} WHERE ${_fields.parentCategoryId} = $_id;
+       SELECT * FROM ${Tables.SUB_CATEGORIES} WHERE ${Fields.PARENT_CATEGORY_ID} = $_id;
        ''');
 
       for (var i = 0; i < _queryResult.length; i++) {
@@ -125,13 +121,13 @@ class CategoryProvider extends ChangeNotifier {
 
     try {
       _queryResult = await _dbHelper.rawQuery(''' 
-       SELECT ${_fields.columnId} FROM ${_tables.categories} WHERE ${_fields.name} = "$name";
+       SELECT ${Fields.COLUMN_ID} FROM ${Tables.CATEGORIES} WHERE ${Fields.NAME} = "$name";
        ''');
 
       if (_queryResult.length == 0) {
         return _categoryId = null;
       }
-      _categoryId = _queryResult[0][_fields.columnId];
+      _categoryId = _queryResult[0][Fields.COLUMN_ID];
     } catch (e) {
       print(e);
       throw Error;

@@ -32,8 +32,7 @@ class DatabaseHelper {
 
   // SQL code to create the database tables
   Future _onCreate(Database db, int version) async {
-    var tables = new TableNames();
-    var fields = new FieldNames();
+    var tables = new Tables();
     var _initialCategories = [
       "Work",
       "Learning",
@@ -46,45 +45,45 @@ class DatabaseHelper {
 
     // activities table
     await db.execute('''
-          CREATE TABLE ${tables.activities} (
-            ${fields.columnId} INTEGER PRIMARY KEY,
-            ${fields.category} TEXT NOT NULL,
-            ${fields.date} TEXT NOT NULL,
-            ${fields.time} TEXT NOT NULL,
-            ${fields.subCategory} TEXT, 
-            ${fields.duration} INTEGER NOT NULL,
-            ${fields.notes} TEXT            
+          CREATE TABLE ${Tables.ACTIVITIES} (
+            ${Fields.COLUMN_ID} INTEGER PRIMARY KEY,
+            ${Fields.CATEGORY} TEXT NOT NULL,
+            ${Fields.DATE} TEXT NOT NULL,
+            ${Fields.TIME} TEXT NOT NULL,
+            ${Fields.SUB_CATEGORY} TEXT, 
+            ${Fields.DURATION} INTEGER NOT NULL,
+            ${Fields.NOTES} TEXT            
           )
           ''');
 
     // categories table
     await db.execute('''
-          CREATE TABLE ${tables.categories} (
-            ${fields.columnId} INTEGER PRIMARY KEY,
-            ${fields.name} TEXT NOT NULL         
+          CREATE TABLE ${Tables.CATEGORIES} (
+            ${Fields.COLUMN_ID} INTEGER PRIMARY KEY,
+            ${Fields.NAME} TEXT NOT NULL         
           )
           ''');
 
     //Initial categories
     for (var i = 0; i < _initialCategories.length; i++) {
-      await db.insert(tables.categories, {fields.name: _initialCategories[i]});
+      await db.insert(Tables.CATEGORIES, {Fields.NAME: _initialCategories[i]});
     }
 
     // sub-categories table
     await db.execute('''
-          CREATE TABLE ${tables.subCategories} (
-            ${fields.columnId} INTEGER PRIMARY KEY,
-            ${fields.parentCategoryId} INTEGER NOT NULL,         
-            ${fields.name} TEXT NOT NULL,         
-            FOREIGN KEY(${fields.parentCategoryId}) REFERENCES ${tables.categories}(${fields.columnId})
+          CREATE TABLE ${Tables.SUB_CATEGORIES} (
+            ${Fields.COLUMN_ID} INTEGER PRIMARY KEY,
+            ${Fields.PARENT_CATEGORY_ID} INTEGER NOT NULL,         
+            ${Fields.NAME} TEXT NOT NULL,         
+            FOREIGN KEY(${Fields.PARENT_CATEGORY_ID}) REFERENCES ${Tables.CATEGORIES}(${Fields.COLUMN_ID})
           )
           ''');
 
     //Initial categories in work TODO: remove this
     for (var i = 0; i < _initialSubCategoriesWork.length; i++) {
-      await db.insert(tables.subCategories, {
-        fields.parentCategoryId: 1,
-        fields.name: _initialSubCategoriesWork[i]
+      await db.insert(Tables.SUB_CATEGORIES, {
+        Fields.PARENT_CATEGORY_ID: 1,
+        Fields.NAME: _initialSubCategoriesWork[i]
       });
     }
   }
@@ -123,19 +122,18 @@ class DatabaseHelper {
   // We are assuming here that the id column in the map is set. The other
   // column values will be used to update the row.
   Future<int> update(Map<String, dynamic> row, String table) async {
-    var fields = FieldNames();
     Database db = await instance.database;
-    int id = row[fields.columnId];
+    int id = row[Fields.COLUMN_ID];
     return await db
-        .update(table, row, where: '${fields.columnId} = ?', whereArgs: [id]);
+        .update(table, row, where: '${Fields.COLUMN_ID} = ?', whereArgs: [id]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is
   // returned. This should be 1 as long as the row exists.
   Future<int> delete(int id, String table) async {
-    var fields = FieldNames();
+
     Database db = await instance.database;
     return await db
-        .delete(table, where: '${fields.columnId} = ?', whereArgs: [id]);
+        .delete(table, where: '${Fields.COLUMN_ID} = ?', whereArgs: [id]);
   }
 }

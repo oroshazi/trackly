@@ -5,13 +5,11 @@ import 'package:trackly_app/models/database_helper_models.dart';
 class Category {
   int id;
   String name;
-  // List<SubCategory> _subCategoryList;
 
   Category({@required this.name, this.id});
 
   Category.fromJSON({Map<String, dynamic> json}) {
-    var _fields = FieldNames();
-    this.id = json[_fields.columnId];
-    this.name = json[_fields.name];
+    this.id = json[Fields.COLUMN_ID];
+    this.name = json[Fields.NAME];
   }
 }

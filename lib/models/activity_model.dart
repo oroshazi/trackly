@@ -20,14 +20,13 @@ class Activity {
       this.notes});
 
   Activity.fromJSON({Map<String, dynamic> json}) {
-    var fields = FieldNames();
-    this.id = json[fields.columnId];
-    this.category = json[fields.category].toString();
-    this.subCategory = json[fields.subCategory];
-    this.duration = this._stringToDuration(json[fields.duration]);
-    this.notes = json[fields.notes];
-    this.date = json[fields.date];
-    this.time = json[fields.time];
+    this.id = json[Fields.COLUMN_ID];
+    this.category = json[Fields.CATEGORY].toString();
+    this.subCategory = json[Fields.SUB_CATEGORY];
+    this.duration = this._stringToDuration(json[Fields.DURATION]);
+    this.notes = json[Fields.NOTES];
+    this.date = json[Fields.DATE];
+    this.time = json[Fields.TIME];
   }
 
   Duration _stringToDuration(String durationInString) {
