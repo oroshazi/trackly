@@ -6,7 +6,7 @@ import 'package:trackly_app/provider/timer_provider.dart';
 import 'package:trackly_app/widgets/activity_list_widget.dart';
 import 'package:trackly_app/widgets/button_start.dart';
 import 'package:trackly_app/widgets/button_stop.dart';
-// import 'package:trackly_app/widgets/select_category_widget.dart';
+import 'package:trackly_app/widgets/layout_wrapper.dart';
 import 'package:trackly_app/widgets/timer_widget.dart';
 
 class TimerScreen extends StatelessWidget {
@@ -82,18 +82,6 @@ class TimerScreen extends StatelessWidget {
           // ),
         ],
       ),
-    );
-  }
-}
-
-class LayoutWrapper extends StatelessWidget {
-  final Widget child;
-  LayoutWrapper({@required this.child});
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      flex: 1,
-      child: Align(alignment: Alignment.topLeft, child: this.child),
     );
   }
 }

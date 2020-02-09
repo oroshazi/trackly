@@ -12,7 +12,6 @@ class ActivityListWidget extends StatelessWidget {
             Provider.of<ActivityProvider>(context).finishedActivities;
 
         return Container(
-          // height: 100,
           child: ListView.builder(
             itemCount: activityList.length,
             itemBuilder: (BuildContext context, int index) {

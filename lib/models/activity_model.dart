@@ -5,7 +5,6 @@ class Activity {
   int id;
   String category;
   String subCategory;
-  // TODO: this should be Duration()
   Duration duration;
   String notes;
   String time;
@@ -25,16 +24,16 @@ class Activity {
     this.id = json[fields.columnId];
     this.category = json[fields.category].toString();
     this.subCategory = json[fields.subCategory];
-    this.duration = this.stringToDuration(json[fields.duration]);
+    this.duration = this._stringToDuration(json[fields.duration]);
     this.notes = json[fields.notes];
     this.date = json[fields.date];
     this.time = json[fields.time];
   }
 
-  Duration stringToDuration(String durationInString) {
+  Duration _stringToDuration(String durationInString) {
     var _durationInDuration;
 
-    // Format: 0:00:04.0000
+    // Duration saved in this format: 0:00:04.0000
     var h = int.parse(durationInString.split(":")[0]);
     var m = int.parse(durationInString.split(":")[1]);
     var s = int.parse(durationInString.split(":")[2].split(".")[0]);
