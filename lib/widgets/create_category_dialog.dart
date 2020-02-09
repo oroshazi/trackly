@@ -50,12 +50,8 @@ class CreateCategoryDialog extends StatelessWidget {
                     Navigator.pop(context);
                   }
                 },
-          validator: (value) {
-            if (value.length < 1) {
-              return "field cannot be empty";
-            }
-            return null;
-          },
+          validator: (value) =>
+              validateInput(value, isSubCategoryList, context),
         ),
       ),
       actions: <Widget>[
@@ -82,4 +78,36 @@ class CreateCategoryDialog extends StatelessWidget {
       ],
     );
   }
+}
+
+validateInput(String value, bool isSubCategoryList, BuildContext context) {
+  if (value.length < 1) {
+    return "field cannot be empty";
+  }
+
+  if (isSubCategoryList) {
+    var subCat = Provider.of<CategoryProvider>(context, listen: false)
+        .subCategoryList(
+            parentCategoryName:
+                Provider.of<ActivityProvider>(context, listen: false)
+                    .runningMainActicity
+                    .category);
+    var match =
+        subCat.firstWhere((item) => item.name == value, orElse: () => null);
+    if (match != null) {
+      return "Category already exists";
+    }
+  }
+
+  if (!isSubCategoryList) {
+    var cat =
+        Provider.of<CategoryProvider>(context, listen: false).categoryList;
+    var match =
+        cat.firstWhere((item) => item.name == value, orElse: () => null);
+    if (match != null) {
+      return "Category already exists";
+    }
+  }
+
+  return null;
 }
