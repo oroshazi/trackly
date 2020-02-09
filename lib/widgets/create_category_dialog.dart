@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackly_app/helpers/capitilize.dart';
 import 'package:trackly_app/models/category_model.dart';
 import 'package:trackly_app/models/sub_category_model.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
@@ -21,7 +22,6 @@ class CreateCategoryDialog extends StatelessWidget {
     return AlertDialog(
       title: Text("Create new category"),
       content: Form(
-        // TODO: here comes the create new thing
         key: _formKey,
         child: TextFormField(
           onSaved: isSubCategoryList
@@ -33,7 +33,8 @@ class CreateCategoryDialog extends StatelessWidget {
                   var finished = await Provider.of<CategoryProvider>(context,
                           listen: false)
                       .createNewSubCategory(SubCategory(
-                          name: subCategoryName, parentId: mainActivity.id));
+                          name: capitalize(subCategoryName),
+                          parentId: mainActivity.id));
 
                   if (finished != null) {
                     Navigator.pop(context);
@@ -42,7 +43,8 @@ class CreateCategoryDialog extends StatelessWidget {
               : (categoryName) async {
                   var finished = await Provider.of<CategoryProvider>(context,
                           listen: false)
-                      .createNewCategory(Category(name: categoryName));
+                      .createNewCategory(
+                          Category(name: capitalize(categoryName)));
 
                   if (finished != null) {
                     Navigator.pop(context);
@@ -70,7 +72,6 @@ class CreateCategoryDialog extends StatelessWidget {
             FlatButton(
               child: Text("Save"),
               onPressed: () {
-                // TODO:
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
                 }
