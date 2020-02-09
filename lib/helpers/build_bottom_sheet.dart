@@ -6,6 +6,7 @@ import 'package:trackly_app/models/sub_category_model.dart';
 import 'package:trackly_app/provider/activity_provider.dart';
 import 'package:trackly_app/provider/category_provider.dart';
 import 'package:trackly_app/provider/timer_provider.dart';
+import 'package:trackly_app/widgets/create_category_dialog.dart';
 import 'package:trackly_app/widgets/list_tile_widget.dart';
 
 ///if  [isOpenedWihButton] = true counter starts
@@ -120,7 +121,7 @@ _buildShowDialog(BuildContext context) async {
 
         bool isSubCategoryList = categoryType is List<SubCategory>;
 
-        return AlertDialogWidget(
+        return CreateCategoryDialog(
             formKey: _formKey, isSubCategoryList: isSubCategoryList);
       });
 }
@@ -135,75 +136,4 @@ List<Category> _buildCategoryListToShow(BuildContext context) {
           ? mainCategoryList
           : subCategoryList;
   return categoryList;
-}
-
-class AlertDialogWidget extends StatelessWidget {
-  const AlertDialogWidget({
-    Key key,
-    @required GlobalKey<FormState> formKey,
-    @required this.isSubCategoryList,
-  })  : _formKey = formKey,
-        super(key: key);
-
-  final GlobalKey<FormState> _formKey;
-  final bool isSubCategoryList;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Create new category"),
-      content: Form(
-        // TODO: here comes the create new thing
-        key: _formKey,
-        child: TextFormField(
-          onSaved: isSubCategoryList
-              ? (subCategoryName) async {
-                  var mainActivity =
-                      Provider.of<ActivityProvider>(context, listen: false)
-                          .runningMainActicity;
-
-                  var finished = await Provider.of<CategoryProvider>(context,
-                          listen: false)
-                      .createNewSubCategory(SubCategory(
-                          name: subCategoryName, parentId: mainActivity.id));
-
-                  if (finished != null) {
-                    Navigator.pop(context);
-                  }
-                }
-              : (categoryName) async {
-                  var finished = await Provider.of<CategoryProvider>(context,
-                          listen: false)
-                      .createNewCategory(Category(name: categoryName));
-
-                  if (finished != null) {
-                    Navigator.pop(context);
-                  }
-                },
-        ),
-      ),
-      actions: <Widget>[
-        // usually buttons at the bottom of the dialog
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            FlatButton(
-              child: Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text("Save"),
-              onPressed: () {
-                // TODO:
-                _formKey.currentState.validate();
-                _formKey.currentState.save();
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 }
