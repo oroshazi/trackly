@@ -6,12 +6,12 @@ import 'package:trackly_app/models/database_helper_models.dart';
 class ActivityProvider extends ChangeNotifier {
   final _dbHelper = DatabaseHelper.instance;
 
-  List<Activity> _finishedActivites = [];
+  List<Activity> _finishedActivities = [];
   List<Activity> _selectedActivityList = [];
 
   List<Activity> get finishedActivities {
     _queryActivites();
-    return _finishedActivites;
+    return _finishedActivities;
   }
 
   Activity get selectedActivity {
@@ -40,7 +40,7 @@ class ActivityProvider extends ChangeNotifier {
     var queryResult;
 
     // Insert finished activity to the first place of the list
-    _finishedActivites.insert(0, activity);
+    _finishedActivities.insert(0, activity);
 
     try {
       queryResult = await _dbHelper.insert({
@@ -71,10 +71,10 @@ class ActivityProvider extends ChangeNotifier {
       /// Notify listeners only if there is a difference
       /// between activity list in memory and activity list
       /// in database.
-      if (activityList.length != _finishedActivites.length) {
+      if (activityList.length != _finishedActivities.length) {
         notifyListeners();
       }
-      _finishedActivites = activityList;
+      _finishedActivities = activityList;
     } catch (e) {
       print(e);
       throw Error;
